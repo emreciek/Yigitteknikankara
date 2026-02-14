@@ -32,3 +32,18 @@ If you see `PrismaClientInitializationError`, it usually means:
 
 ## 💡 Performance Optimization
 We have updated `lib/prisma.js` (Singleton Pattern) and `.env` (Connection Limits) to ensure stability.
+
+## 🔴 CRITICAL: Vercel Deployment Fix (The Error You Scrolled To)
+If you see `PrismaClientInitializationError: error: Environment variable not found: DATABASE_URL` on Vercel logs:
+
+**Reason:** Your local `.env` file is NOT uploaded to Vercel (for security).
+**Fix:**
+1.  Go to your **Vercel Project Dashboard**.
+2.  Click **Settings** -> **Environment Variables**.
+3.  Add Key: `DATABASE_URL`
+4.  Add Value: `file:./dev.db?connection_limit=1` (or your Postgres URL).
+5.  **Redeploy** your project (Deployments -> Redeploy).
+
+> **⚠️ WARNING for SQLite on Vercel:**
+> Vercel is "Serverless" and has a read-only file system. If you use SQLite (`dev.db`), **your changes (adding services, editing pages) will DISAPPEAR** after a short time or on the next deployment.
+> **Recommended:** Use **Vercel Postgres**, **Neon**, or **Supabase** for a real production database.
