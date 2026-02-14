@@ -18,6 +18,8 @@ export default function AdminImages() {
         setTimeout(() => setToast(null), 3000);
     };
 
+    const [isDragging, setIsDragging] = useState(false);
+
     const loadImages = () => {
         const url = filterCategory ? `/api/images?category=${filterCategory}` : '/api/images';
         fetch(url)
@@ -28,8 +30,7 @@ export default function AdminImages() {
 
     useEffect(() => { loadImages(); }, [filterCategory]);
 
-    const handleUpload = async (e) => {
-        const files = e.target.files;
+    const processFiles = async (files) => {
         if (!files || files.length === 0) return;
 
         setUploading(true);
@@ -61,6 +62,26 @@ export default function AdminImages() {
         setAlt('');
         if (fileRef.current) fileRef.current.value = '';
         loadImages();
+    };
+
+    const handleFileSelect = (e) => {
+        processFiles(e.target.files);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        processFiles(e.dataTransfer.files);
     };
 
     const handleDelete = async (id) => {
@@ -112,17 +133,24 @@ export default function AdminImages() {
                 </div>
 
                 <div
-                    className="upload-zone"
+                    className={`upload-zone ${isDragging ? 'dragging' : ''}`}
                     onClick={() => fileRef.current?.click()}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    style={{
+                        borderColor: isDragging ? 'var(--primary)' : 'var(--gray-300)',
+                        backgroundColor: isDragging ? 'var(--primary-light)' : 'var(--white)',
+                    }}
                 >
                     <div className="upload-icon">{uploading ? '⏳' : '📁'}</div>
-                    <p>{uploading ? 'Yükleniyor...' : 'Görselleri yüklemek için tıklayın veya sürükleyin'}</p>
+                    <p>{uploading ? 'Yükleniyor...' : isDragging ? 'Buraya Bırakın' : 'Görselleri yüklemek için tıklayın veya sürükleyin'}</p>
                     <p className="upload-hint">JPG, PNG, WebP • Maksimum 10MB</p>
                 </div>
                 <input
                     type="file"
                     ref={fileRef}
-                    onChange={handleUpload}
+                    onChange={handleFileSelect}
                     accept="image/*"
                     multiple
                     style={{ display: 'none' }}
