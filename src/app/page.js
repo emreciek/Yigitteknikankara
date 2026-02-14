@@ -10,9 +10,16 @@ export default function HomePage() {
   const [sections, setSections] = useState([]);
   const [images, setImages] = useState([]);
   const [contact, setContact] = useState(null);
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
-    // Fetch homepage sections
+    // Fetch services (dynamic)
+    fetch('/api/services')
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data)) setServices(data); })
+      .catch(() => { });
+
+    // Fetch homepage sections (hero, gallery setup)
     fetch('/api/pages')
       .then(res => res.json())
       .then(data => {
@@ -39,11 +46,6 @@ export default function HomePage() {
   const heroSection = sections.find(s => s.type === 'hero');
   const servicesSection = sections.find(s => s.type === 'services');
   const gallerySection = sections.find(s => s.type === 'gallery');
-
-  let services = [];
-  try {
-    if (servicesSection?.content) services = JSON.parse(servicesSection.content);
-  } catch { }
 
   return (
     <>
@@ -120,44 +122,20 @@ export default function HomePage() {
           </div>
           <div className="services-grid">
             {services.length > 0 ? services.map((service, i) => (
-              <div className="service-card fade-in-up" key={i} style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="service-icon">{serviceIcons[i] || '🔧'}</div>
+              <div className="service-card fade-in-up" key={service.id || i} style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="service-icon">
+                  {service.imageUrl ? (
+                    <img src={`/uploads/${service.imageUrl}`} alt={service.title} style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+                  ) : (
+                    // Fallback to simple generic icon if no image (avoiding emojis as requested)
+                    <div style={{ width: '64px', height: '64px', background: 'var(--primary)', maskImage: 'url(/icon.png)', maskSize: 'contain', WebkitMaskImage: 'url(/icon.png)', WebkitMaskSize: 'contain' }}></div>
+                  )}
+                </div>
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
               </div>
             )) : (
-              <>
-                <div className="service-card">
-                  <div className="service-icon">🔧</div>
-                  <h3>Kombi Bakımı</h3>
-                  <p>Periyodik kombi bakım hizmetleri ile cihazınızın ömrünü uzatın.</p>
-                </div>
-                <div className="service-card">
-                  <div className="service-icon">⚙️</div>
-                  <h3>Kombi Tamiri</h3>
-                  <p>Her marka ve model kombi tamiri konusunda uzman ekibimiz.</p>
-                </div>
-                <div className="service-card">
-                  <div className="service-icon">🏗️</div>
-                  <h3>Kombi Montajı</h3>
-                  <p>Profesyonel kombi montaj ve kurulum hizmetleri.</p>
-                </div>
-                <div className="service-card">
-                  <div className="service-icon">🚨</div>
-                  <h3>Acil Servis</h3>
-                  <p>7/24 acil teknik servis hizmeti ile her zaman yanınızdayız.</p>
-                </div>
-                <div className="service-card">
-                  <div className="service-icon">🔥</div>
-                  <h3>Kalorifer Tesisatı</h3>
-                  <p>Kalorifer tesisatı döşeme, bakım ve onarım hizmetleri.</p>
-                </div>
-                <div className="service-card">
-                  <div className="service-icon">💨</div>
-                  <h3>Doğalgaz Tesisatı</h3>
-                  <p>Doğalgaz tesisatı montaj ve kontrol hizmetleri.</p>
-                </div>
-              </>
+              <p style={{ textAlign: 'center', width: '100%', padding: '20px' }}>Hizmetler yükleniyor veya henüz eklenmedi.</p>
             )}
           </div>
         </div>

@@ -65,6 +65,7 @@ export default function AdminLayout({ children }) {
         { href: '/admin', label: '📊 Dashboard', icon: '📊' },
         { href: '/admin/images', label: '🖼️ Görseller', icon: '🖼️' },
         { href: '/admin/pages', label: '📄 Sayfalar', icon: '📄' },
+        { href: '/admin/services', label: '⚙️ Hizmetler', icon: '⚙️' },
         { href: '/admin/contact', label: '📞 İletişim', icon: '📞' },
     ];
 
