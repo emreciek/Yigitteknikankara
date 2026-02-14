@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { writeFile, mkdir } from 'fs/promises';
+import { put } from '@vercel/blob';
 import path from 'path';
 
 export async function GET() {
@@ -24,17 +24,11 @@ export async function POST(request) {
         let imageUrl = null;
 
         if (file && file.size > 0) {
-            const buffer = Buffer.from(await file.arrayBuffer());
             const filename = Date.now() + '-' + file.name.replaceAll(' ', '_');
-            const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-
-            await mkdir(uploadDir, { recursive: true });
-
-            await writeFile(
-                path.join(uploadDir, filename),
-                buffer
-            );
-            imageUrl = filename;
+            const blob = await put(filename, file, {
+                access: 'public',
+            });
+            imageUrl = blob.url;
         }
 
         const newService = await prisma.service.create({
