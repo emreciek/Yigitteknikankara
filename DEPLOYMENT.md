@@ -33,17 +33,26 @@ If you see `PrismaClientInitializationError`, it usually means:
 ## 💡 Performance Optimization
 We have updated `lib/prisma.js` (Singleton Pattern) and `.env` (Connection Limits) to ensure stability.
 
-## 🔴 CRITICAL: Vercel Deployment Fix (The Error You Scrolled To)
-If you see `PrismaClientInitializationError: error: Environment variable not found: DATABASE_URL` on Vercel logs:
+## 🔴 CRITICAL: Setting Up PostgreSQL (Required)
+The project has been switched to **PostgreSQL** for stability and compatibility with Vercel.
 
-**Reason:** Your local `.env` file is NOT uploaded to Vercel (for security).
-**Fix:**
-1.  Go to your **Vercel Project Dashboard**.
-2.  Click **Settings** -> **Environment Variables**.
-3.  Add Key: `DATABASE_URL`
-4.  Add Value: `file:./dev.db?connection_limit=1` (or your Postgres URL).
-5.  **Redeploy** your project (Deployments -> Redeploy).
+### 1. Create a Database (Vercel Postgres)
+1.  Go to your **Vercel Dashboard**.
+2.  Click **Storage** -> **Create Database** -> **Postgres**.
+3.  Give it a name (e.g., `yigitteknik-db`) and region (e.g., `Frankfurt`).
+4.  Once created, go to **.env.local** tab in the database page.
+5.  Copy the `POSTGRES_PRISMA_URL` or `POSTGRES_URL_NON_POOLING`.
 
-> **⚠️ WARNING for SQLite on Vercel:**
-> Vercel is "Serverless" and has a read-only file system. If you use SQLite (`dev.db`), **your changes (adding services, editing pages) will DISAPPEAR** after a short time or on the next deployment.
-> **Recommended:** Use **Vercel Postgres**, **Neon**, or **Supabase** for a real production database.
+### 2. Update Environment Variables
+**On Vercel:**
+-   Go to Project Settings -> Environment Variables.
+-   Add `DATABASE_URL` with the value you copied.
+
+**Locally (for development):**
+-   Open `.env` file in your project.
+-   Replace the `DATABASE_URL` with your connection string.
+-   Run `npx prisma db push` to create the tables in your new database.
+
+### 3. Verify
+-   Run `npm run dev`.
+-   If it works, your migration is complete!
