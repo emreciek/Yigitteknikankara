@@ -34,6 +34,14 @@ export default function AdminImages() {
         if (!files || files.length === 0) return;
 
         setUploading(true);
+        // Capture current state in closure or use simplified logic
+        // Since we are inside a function component, these values are fresh when processFiles is called from handleFileSelect
+        // But for the useEffect listener, we need to be careful. 
+        // We will pass the function to the listener, but the listener is bound on mount.
+        // Actually, we can just use the state directly if we include it in dependency array of useEffect, 
+        // OR we can use refs for mutable state that doesn't trigger re-binds.
+        // For simplicity and safety against stale closures in event listeners, let's use the refs approach for the values if we were strictly binding once.
+        // However, re-binding on state change is fine for this scale.
 
         for (const file of files) {
             const formData = new FormData();
@@ -53,16 +61,11 @@ export default function AdminImages() {
                 } else {
                     const errorText = await res.text();
                     console.error('Upload failed:', res.status, errorText);
-                    try {
-                        const errorJson = JSON.parse(errorText);
-                        showToast(`Yüklenemedi: ${errorJson.error || 'Bilinmeyen hata'}`, 'error');
-                    } catch {
-                        showToast(`Yüklenemedi (${res.status})`, 'error');
-                    }
+                    showToast(`Yüklenemedi (${res.status})`, 'error');
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                showToast('Yükleme hatası: ' + error.message, 'error');
+                showToast('Hata: ' + error.message, 'error');
             }
         }
 
@@ -78,45 +81,60 @@ export default function AdminImages() {
         }
     };
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        // Only set false if we are leaving the main container
-        if (e.currentTarget.contains(e.relatedTarget)) return;
-        setIsDragging(false);
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsDragging(false);
-
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            processFiles(e.dataTransfer.files);
-        }
-    };
-
-    // Prevent default behavior for dragover/drop on the window to stop browser from opening files
+    // Native drag and drop handling to ensure preventDefault works
     useEffect(() => {
-        const preventDefault = (e) => {
+        const dropZone = document.getElementById('drop-zone');
+        if (!dropZone) return;
+
+        const handleNativeDragOver = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(true);
+        };
+
+        const handleNativeDragLeave = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(false);
+        };
+
+        const handleNativeDrop = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(false);
+
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                processFiles(files);
+            }
+        };
+
+        // Global prevent default to stop browser from opening files if missed
+        const handleGlobalDragOver = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+        const handleGlobalDrop = (e) => {
             e.preventDefault();
             e.stopPropagation();
         };
 
-        window.addEventListener('dragover', preventDefault);
-        window.addEventListener('drop', preventDefault);
+        dropZone.addEventListener('dragover', handleNativeDragOver);
+        dropZone.addEventListener('dragleave', handleNativeDragLeave);
+        dropZone.addEventListener('drop', handleNativeDrop);
+
+        window.addEventListener('dragover', handleGlobalDragOver);
+        window.addEventListener('drop', handleGlobalDrop);
 
         return () => {
-            window.removeEventListener('dragover', preventDefault);
-            window.removeEventListener('drop', preventDefault);
+            dropZone.removeEventListener('dragover', handleNativeDragOver);
+            dropZone.removeEventListener('dragleave', handleNativeDragLeave);
+            dropZone.removeEventListener('drop', handleNativeDrop);
+
+            window.removeEventListener('dragover', handleGlobalDragOver);
+            window.removeEventListener('drop', handleGlobalDrop);
         };
-    }, []);
+    }, [category, alt]); // Re-bind when state changes so processFiles has correct closure values
 
     const handleDelete = async (id) => {
         if (!confirm('Bu görseli silmek istediğinize emin misiniz?')) return;
@@ -167,11 +185,9 @@ export default function AdminImages() {
                 </div>
 
                 <div
+                    id="drop-zone"
                     className={`upload-zone ${isDragging ? 'dragging' : ''}`}
                     onClick={() => fileRef.current?.click()}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
                     style={{
                         borderColor: isDragging ? 'var(--primary)' : 'var(--gray-300)',
                         backgroundColor: isDragging ? 'var(--primary-light)' : 'var(--white)',
