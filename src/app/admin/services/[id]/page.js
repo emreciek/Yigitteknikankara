@@ -129,7 +129,11 @@ export default function EditServicePage({ params }) {
                         <label>Görsel (Değiştirmek için yeni dosya seçin)</label>
                         {currentImage && (
                             <div style={{ marginBottom: '10px' }}>
-                                <img src={`/uploads/${currentImage}`} alt="Mevcut" style={{ maxHeight: '100px', borderRadius: '4px' }} />
+                                <img
+                                    src={currentImage.startsWith('http') ? currentImage : `/uploads/${currentImage}`}
+                                    alt="Mevcut"
+                                    style={{ maxHeight: '100px', borderRadius: '4px' }}
+                                />
                                 <p style={{ fontSize: '0.8rem', color: '#666' }}>Mevcut Görsel</p>
                             </div>
                         )}

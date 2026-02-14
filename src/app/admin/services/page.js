@@ -59,7 +59,11 @@ export default function ServicesPage() {
                             <tr key={service.id}>
                                 <td>
                                     {service.imageUrl ? (
-                                        <img src={`/uploads/${service.imageUrl}`} alt={service.title} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
+                                        <img
+                                            src={service.imageUrl.startsWith('http') ? service.imageUrl : `/uploads/${service.imageUrl}`}
+                                            alt={service.title}
+                                            style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                                        />
                                     ) : (
                                         <span style={{ fontSize: '1.5rem' }}>🔧</span>
                                     )}

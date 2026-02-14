@@ -105,7 +105,10 @@ export default function DynamicPage() {
                                 <div className="gallery-grid">
                                     {section.images?.map(img => (
                                         <div className="gallery-item" key={img.id}>
-                                            <img src={`/uploads/${img.filename}`} alt={img.alt || ''} />
+                                            <img
+                                                src={img.filename.startsWith('http') ? img.filename : `/uploads/${img.filename}`}
+                                                alt={img.alt || ''}
+                                            />
                                             <div className="gallery-overlay">
                                                 <span>{img.alt || ''}</span>
                                             </div>

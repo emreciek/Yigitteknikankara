@@ -87,16 +87,25 @@ export default function HomePage() {
               {images.length > 0 ? (
                 <>
                   <div className="hero-image-card">
-                    <img src={`/uploads/${images[0].filename}`} alt={images[0].alt || 'Yiğit Teknik'} />
+                    <img
+                      src={images[0].filename.startsWith('http') ? images[0].filename : `/uploads/${images[0].filename}`}
+                      alt={images[0].alt || 'Yiğit Teknik'}
+                    />
                   </div>
                   {images[1] && (
                     <div className="hero-image-card">
-                      <img src={`/uploads/${images[1].filename}`} alt={images[1].alt || 'Teknik Servis'} />
+                      <img
+                        src={images[1].filename.startsWith('http') ? images[1].filename : `/uploads/${images[1].filename}`}
+                        alt={images[1].alt || 'Teknik Servis'}
+                      />
                     </div>
                   )}
                   {images[2] && (
                     <div className="hero-image-card">
-                      <img src={`/uploads/${images[2].filename}`} alt={images[2].alt || 'Kombi Bakım'} />
+                      <img
+                        src={images[2].filename.startsWith('http') ? images[2].filename : `/uploads/${images[2].filename}`}
+                        alt={images[2].alt || 'Kombi Bakım'}
+                      />
                     </div>
                   )}
                 </>
@@ -125,7 +134,11 @@ export default function HomePage() {
               <div className="service-card fade-in-up" key={service.id || i} style={{ animationDelay: `${i * 0.1}s` }}>
                 <div className="service-icon">
                   {service.imageUrl ? (
-                    <img src={`/uploads/${service.imageUrl}`} alt={service.title} style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+                    <img
+                      src={service.imageUrl.startsWith('http') ? service.imageUrl : `/uploads/${service.imageUrl}`}
+                      alt={service.title}
+                      style={{ width: '64px', height: '64px', objectFit: 'contain' }}
+                    />
                   ) : (
                     // Fallback to simple generic icon if no image (avoiding emojis as requested)
                     <div style={{ width: '64px', height: '64px', background: 'var(--primary)', maskImage: 'url(/icon.png)', maskSize: 'contain', WebkitMaskImage: 'url(/icon.png)', WebkitMaskSize: 'contain' }}></div>
@@ -152,7 +165,10 @@ export default function HomePage() {
           <div className="gallery-grid">
             {images.length > 0 ? images.map((img) => (
               <div className="gallery-item" key={img.id}>
-                <img src={`/uploads/${img.filename}`} alt={img.alt || 'Teknik servis çalışması'} />
+                <img
+                  src={img.filename.startsWith('http') ? img.filename : `/uploads/${img.filename}`}
+                  alt={img.alt || 'Teknik servis çalışması'}
+                />
                 <div className="gallery-overlay">
                   <span>{img.alt || img.category}</span>
                 </div>
