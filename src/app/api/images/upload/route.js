@@ -33,13 +33,22 @@ export async function POST(request) {
 
         await writeFile(filepath, buffer);
 
+        // Parse sectionId safely
+        let parsedSectionId = null;
+        if (sectionId && sectionId !== 'null' && sectionId !== 'undefined') {
+            const parsed = parseInt(sectionId);
+            if (!isNaN(parsed)) {
+                parsedSectionId = parsed;
+            }
+        }
+
         const image = await prisma.image.create({
             data: {
                 filename,
                 originalName: file.name,
                 alt,
                 category,
-                sectionId: sectionId ? parseInt(sectionId) : null,
+                sectionId: parsedSectionId,
             },
         });
 

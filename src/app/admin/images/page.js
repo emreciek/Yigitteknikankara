@@ -51,10 +51,18 @@ export default function AdminImages() {
                 if (res.ok) {
                     showToast(`${file.name} yüklendi`);
                 } else {
-                    showToast(`${file.name} yüklenemedi`, 'error');
+                    const errorText = await res.text();
+                    console.error('Upload failed:', res.status, errorText);
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        showToast(`Yüklenemedi: ${errorJson.error || 'Bilinmeyen hata'}`, 'error');
+                    } catch {
+                        showToast(`Yüklenemedi (${res.status})`, 'error');
+                    }
                 }
-            } catch {
-                showToast('Yükleme hatası', 'error');
+            } catch (error) {
+                console.error('Upload error:', error);
+                showToast('Yükleme hatası: ' + error.message, 'error');
             }
         }
 
@@ -65,24 +73,50 @@ export default function AdminImages() {
     };
 
     const handleFileSelect = (e) => {
-        processFiles(e.target.files);
+        if (e.target.files && e.target.files.length > 0) {
+            processFiles(e.target.files);
+        }
     };
 
     const handleDragOver = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         setIsDragging(true);
     };
 
     const handleDragLeave = (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        // Only set false if we are leaving the main container
+        if (e.currentTarget.contains(e.relatedTarget)) return;
         setIsDragging(false);
     };
 
     const handleDrop = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         setIsDragging(false);
-        processFiles(e.dataTransfer.files);
+
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            processFiles(e.dataTransfer.files);
+        }
     };
+
+    // Prevent default behavior for dragover/drop on the window to stop browser from opening files
+    useEffect(() => {
+        const preventDefault = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+
+        window.addEventListener('dragover', preventDefault);
+        window.addEventListener('drop', preventDefault);
+
+        return () => {
+            window.removeEventListener('dragover', preventDefault);
+            window.removeEventListener('drop', preventDefault);
+        };
+    }, []);
 
     const handleDelete = async (id) => {
         if (!confirm('Bu görseli silmek istediğinize emin misiniz?')) return;
