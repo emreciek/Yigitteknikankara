@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model Page {
+  id        Int       @id @default(autoincrement())
+  title     String
+  slug      String    @unique
+  content   String?
+  isVisible Boolean   @default(true)
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sections  Section[]
+}
+
+model Section {
+  id      Int     @id @default(autoincrement())
+  pageId  Int
+  title   String
+  content String?
+  type    String  @default("text")
+  order   Int     @default(0)
+  page    Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  images  Image[]
+}
+
+model Image {
+  id           Int      @id @default(autoincrement())
+  sectionId    Int?
+  filename     String
+  originalName String
+  alt          String?
+  category     String   @default("gallery")
+  createdAt    DateTime @default(now())
+  section      Section? @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+}
+
+model ContactInfo {
+  id           Int     @id @default(autoincrement())
+  address      String?
+  phone        String?
+  email        String?
+  mapUrl       String?
+  workingHours String?
+}
