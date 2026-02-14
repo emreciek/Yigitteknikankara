@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
+import { put } from '@vercel/blob';
 import path from 'path';
 
 export async function POST(request) {
@@ -19,19 +19,14 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Dosya gerekli' }, { status: 400 });
         }
 
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Create uploads directory
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        await mkdir(uploadDir, { recursive: true });
-
         // Generate unique filename
         const ext = path.extname(file.name);
         const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`;
-        const filepath = path.join(uploadDir, filename);
 
-        await writeFile(filepath, buffer);
+        // Upload to Vercel Blob
+        const blob = await put(filename, file, {
+            access: 'public',
+        });
 
         // Parse sectionId safely
         let parsedSectionId = null;
@@ -44,7 +39,7 @@ export async function POST(request) {
 
         const image = await prisma.image.create({
             data: {
-                filename,
+                filename: blob.url,
                 originalName: file.name,
                 alt,
                 category,
