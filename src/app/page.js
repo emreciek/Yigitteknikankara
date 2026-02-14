@@ -224,12 +224,16 @@ export default function HomePage() {
                   <p>{contact?.phone || 'Yükleniyor...'}</p>
                 </div>
               </div>
-              {contact?.email && (
+              {contact?.instagram && (
                 <div className="contact-card">
-                  <div className="contact-icon">📧</div>
+                  <div className="contact-icon">📸</div>
                   <div>
-                    <h3>E-posta</h3>
-                    <p>{contact.email}</p>
+                    <h3>Instagram</h3>
+                    <p>
+                      <a href={contact.instagram.startsWith('http') ? contact.instagram : `https://instagram.com/${contact.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer">
+                        {contact.instagram}
+                      </a>
+                    </p>
                   </div>
                 </div>
               )}

@@ -6,7 +6,7 @@ export default function AdminContact() {
     const [form, setForm] = useState({
         address: '',
         phone: '',
-        email: '',
+        instagram: '',
         mapUrl: '',
         workingHours: '',
     });
@@ -28,7 +28,7 @@ export default function AdminContact() {
                 setForm({
                     address: data.address || '',
                     phone: data.phone || '',
-                    email: data.email || '',
+                    instagram: data.instagram || '',
                     mapUrl: data.mapUrl || '',
                     workingHours: data.workingHours || '',
                 });
@@ -96,12 +96,12 @@ export default function AdminContact() {
                             />
                         </div>
                         <div className="form-group">
-                            <label>📧 E-posta</label>
+                            <label>📸 Instagram (Kullanıcı Adı veya URL)</label>
                             <input
-                                type="email"
-                                value={form.email}
-                                onChange={e => setForm({ ...form, email: e.target.value })}
-                                placeholder="info@yigitteknik.com"
+                                type="text"
+                                value={form.instagram}
+                                onChange={e => setForm({ ...form, instagram: e.target.value })}
+                                placeholder="@yigitteknikankara"
                             />
                         </div>
                     </div>

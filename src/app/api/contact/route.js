@@ -6,7 +6,7 @@ export async function GET() {
     try {
         let contact = await prisma.contactInfo.findFirst();
         if (!contact) {
-            contact = { address: '', phone: '', email: '', mapUrl: '', workingHours: '' };
+            contact = { address: '', phone: '', instagram: '', mapUrl: '', workingHours: '' };
         }
         return NextResponse.json(contact);
     } catch (error) {

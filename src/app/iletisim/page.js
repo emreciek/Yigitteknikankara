@@ -45,14 +45,14 @@ export default function ContactPage() {
                                     </p>
                                 </div>
                             </div>
-                            {contact?.email && (
+                            {contact?.instagram && (
                                 <div className="contact-card">
-                                    <div className="contact-icon">📧</div>
+                                    <div className="contact-icon">📸</div>
                                     <div>
-                                        <h3>E-posta</h3>
+                                        <h3>Instagram</h3>
                                         <p>
-                                            <a href={`mailto:${contact.email}`} style={{ color: 'var(--blue-600)', fontWeight: 600 }}>
-                                                {contact.email}
+                                            <a href={contact.instagram.startsWith('http') ? contact.instagram : `https://instagram.com/${contact.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--blue-600)', fontWeight: 600 }}>
+                                                {contact.instagram}
                                             </a>
                                         </p>
                                     </div>

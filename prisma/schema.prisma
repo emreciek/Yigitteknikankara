@@ -52,7 +52,7 @@ model ContactInfo {
   id           Int     @id @default(autoincrement())
   address      String?
   phone        String?
-  email        String?
+  instagram    String?
   mapUrl       String?
   workingHours String?
 }

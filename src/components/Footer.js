@@ -48,7 +48,13 @@ export default function Footer() {
                         <h4>İletişim</h4>
                         <ul>
                             {contact?.phone && <li>📞 {contact.phone}</li>}
-                            {contact?.email && <li>📧 {contact.email}</li>}
+                            {contact?.instagram && (
+                                <li>
+                                    <a href={contact.instagram.startsWith('http') ? contact.instagram : `https://instagram.com/${contact.instagram.replace('@', '')}`} target="_blank" rel="noopener noreferrer">
+                                        📸 {contact.instagram}
+                                    </a>
+                                </li>
+                            )}
                             {contact?.address && <li>📍 {contact.address}</li>}
                             {contact?.workingHours && <li>🕐 {contact.workingHours}</li>}
                         </ul>
