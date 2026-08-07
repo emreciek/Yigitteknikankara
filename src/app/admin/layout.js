@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AdminLayout({ children }) {
     const [authenticated, setAuthenticated] = useState(false);
@@ -73,7 +74,7 @@ export default function AdminLayout({ children }) {
         <div className="admin-layout">
             <aside className="admin-sidebar">
                 <div className="admin-sidebar-header">
-                    <h2><img src="/logo.png" alt="Logo" style={{ width: '28px', height: '28px', verticalAlign: 'middle', marginRight: '8px' }} />Yiğit Teknik</h2>
+                    <h2><Image src="/logo.png" alt="Logo" width={28} height={28} style={{ verticalAlign: 'middle', marginRight: '8px' }} />Yiğit Teknik</h2>
                     <p>Yönetim Paneli</p>
                 </div>
                 <ul className="admin-nav">

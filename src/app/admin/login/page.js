@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function AdminLogin() {
     const [username, setUsername] = useState('');
@@ -43,7 +44,7 @@ export default function AdminLogin() {
         <div className="login-page">
             <div className="login-card">
                 <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-                    <img src="/logo.png" alt="Yiğit Teknik Logo" style={{ width: '64px', height: '64px' }} />
+                    <Image src="/logo.png" alt="Yiğit Teknik Logo" width={64} height={64} />
                 </div>
                 <h1>Yiğit Teknik</h1>
                 <p className="login-subtitle">Yönetim Paneli</p>

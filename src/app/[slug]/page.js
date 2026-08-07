@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function DynamicPage() {
     const params = useParams();
@@ -104,10 +105,13 @@ export default function DynamicPage() {
                                 </div>
                                 <div className="gallery-grid">
                                     {section.images?.map(img => (
-                                        <div className="gallery-item" key={img.id}>
-                                            <img
+                                        <div className="gallery-item" key={img.id} style={{ position: 'relative', height: '300px' }}>
+                                            <Image
                                                 src={img.filename.startsWith('http') ? img.filename : `/uploads/${img.filename}`}
                                                 alt={img.alt || ''}
+                                                fill
+                                                style={{ objectFit: 'cover' }}
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                             <div className="gallery-overlay">
                                                 <span>{img.alt || ''}</span>

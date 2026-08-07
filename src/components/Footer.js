@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
     const [contact, setContact] = useState(null);
@@ -18,7 +19,7 @@ export default function Footer() {
             <div className="footer-inner">
                 <div className="footer-grid">
                     <div className="footer-brand">
-                        <h3><img src="/logo.png" alt="Logo" style={{ width: '32px', height: '32px', verticalAlign: 'middle', marginRight: '8px' }} />Yiğit Teknik</h3>
+                        <h3><Image src="/logo.png" alt="Logo" width={32} height={32} style={{ verticalAlign: 'middle', marginRight: '8px' }} />Yiğit Teknik</h3>
                         <p>
                             Profesyonel kombi ve ısıtma sistemleri teknik servisi.
                             Uzman ekibimizle kaliteli ve güvenilir hizmet sunuyoruz.

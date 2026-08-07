@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar() {
         <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-inner">
                 <Link href="/" className="navbar-logo">
-                    <img src="/logo.png" alt="Yiğit Teknik Logo" className="logo-img" />
+                    <Image src="/logo.png" alt="Yiğit Teknik Logo" className="logo-img" width={150} height={40} priority loading="eager" />
                     Yiğit Teknik
                 </Link>
 

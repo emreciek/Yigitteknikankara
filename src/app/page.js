@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 const serviceIcons = ['🔧', '⚙️', '🏗️', '🚨', '🔥', '💨'];
 
@@ -86,25 +87,40 @@ export default function HomePage() {
             <div className="hero-image-grid">
               {images.length > 0 ? (
                 <>
-                  <div className="hero-image-card">
-                    <img
+                  <div className="hero-image-card" style={{ position: 'relative', height: '100%', minHeight: '300px' }}>
+                    <Image
                       src={images[0].filename.startsWith('http') ? images[0].filename : `/uploads/${images[0].filename}`}
                       alt={images[0].alt || 'Yiğit Teknik'}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      priority
+                      loading="eager"
                     />
                   </div>
                   {images[1] && (
-                    <div className="hero-image-card">
-                      <img
+                    <div className="hero-image-card" style={{ position: 'relative', height: '100%', minHeight: '300px' }}>
+                      <Image
                         src={images[1].filename.startsWith('http') ? images[1].filename : `/uploads/${images[1].filename}`}
                         alt={images[1].alt || 'Teknik Servis'}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        priority
+                        loading="eager"
                       />
                     </div>
                   )}
                   {images[2] && (
-                    <div className="hero-image-card">
-                      <img
+                    <div className="hero-image-card" style={{ position: 'relative', height: '100%', minHeight: '300px' }}>
+                      <Image
                         src={images[2].filename.startsWith('http') ? images[2].filename : `/uploads/${images[2].filename}`}
                         alt={images[2].alt || 'Kombi Bakım'}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        priority
+                        loading="eager"
                       />
                     </div>
                   )}
@@ -134,10 +150,12 @@ export default function HomePage() {
               <div className="service-card fade-in-up" key={service.id || i} style={{ animationDelay: `${i * 0.1}s` }}>
                 <div className="service-icon">
                   {service.imageUrl ? (
-                    <img
+                    <Image
                       src={service.imageUrl.startsWith('http') ? service.imageUrl : `/uploads/${service.imageUrl}`}
                       alt={service.title}
-                      style={{ width: '64px', height: '64px', objectFit: 'contain' }}
+                      width={64}
+                      height={64}
+                      style={{ objectFit: 'contain' }}
                     />
                   ) : (
                     // Fallback to simple generic icon if no image (avoiding emojis as requested)
@@ -164,10 +182,13 @@ export default function HomePage() {
           </div>
           <div className="gallery-grid">
             {images.length > 0 ? images.map((img) => (
-              <div className="gallery-item" key={img.id}>
-                <img
+              <div className="gallery-item" key={img.id} style={{ position: 'relative', height: '300px' }}>
+                <Image
                   src={img.filename.startsWith('http') ? img.filename : `/uploads/${img.filename}`}
                   alt={img.alt || 'Teknik servis çalışması'}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="gallery-overlay">
                   <span>{img.alt || img.category}</span>

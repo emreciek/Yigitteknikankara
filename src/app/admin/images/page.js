@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 export default function AdminImages() {
     const [images, setImages] = useState([]);
@@ -232,10 +233,13 @@ export default function AdminImages() {
                     ) : (
                         <div className="image-grid">
                             {images.map(img => (
-                                <div className="image-grid-item" key={img.id}>
-                                    <img
+                                <div className="image-grid-item" key={img.id} style={{ position: 'relative', height: '200px' }}>
+                                    <Image
                                         src={img.filename.startsWith('http') ? img.filename : `/uploads/${img.filename}`}
                                         alt={img.alt || ''}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        sizes="(max-width: 768px) 100vw, 33vw"
                                     />
                                     <div className="image-actions">
                                         <button className="image-action-btn" onClick={() => handleDelete(img.id)} title="Sil">

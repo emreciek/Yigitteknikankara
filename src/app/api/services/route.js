@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { put } from '@vercel/blob';
 import path from 'path';
+import sharp from 'sharp';
 
 export async function GET() {
     try {
@@ -24,9 +25,16 @@ export async function POST(request) {
         let imageUrl = null;
 
         if (file && file.size > 0) {
-            const filename = Date.now() + '-' + file.name.replaceAll(' ', '_');
-            const blob = await put(filename, file, {
+            const buffer = Buffer.from(await file.arrayBuffer());
+            const processedBuffer = await sharp(buffer)
+                .resize({ width: 1920, withoutEnlargement: true })
+                .webp({ quality: 80 })
+                .toBuffer();
+                
+            const filename = Date.now() + '-' + Math.random().toString(36).substring(2, 8) + '.webp';
+            const blob = await put(filename, processedBuffer, {
                 access: 'public',
+                contentType: 'image/webp',
             });
             imageUrl = blob.url;
         }

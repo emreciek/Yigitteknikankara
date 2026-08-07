@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import Image from 'next/image';
 
 export default function EditServicePage({ params }) {
     // Unwrap params using React.use() as per Next.js 15+ guidance or simple async usage pattern if using older versions
@@ -129,10 +130,12 @@ export default function EditServicePage({ params }) {
                         <label>Görsel (Değiştirmek için yeni dosya seçin)</label>
                         {currentImage && (
                             <div style={{ marginBottom: '10px' }}>
-                                <img
+                                <Image
                                     src={currentImage.startsWith('http') ? currentImage : `/uploads/${currentImage}`}
                                     alt="Mevcut"
-                                    style={{ maxHeight: '100px', borderRadius: '4px' }}
+                                    width={100}
+                                    height={100}
+                                    style={{ borderRadius: '4px', objectFit: 'cover' }}
                                 />
                                 <p style={{ fontSize: '0.8rem', color: '#666' }}>Mevcut Görsel</p>
                             </div>

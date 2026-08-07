@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function ServicesPage() {
     const [services, setServices] = useState([]);
@@ -59,10 +60,12 @@ export default function ServicesPage() {
                             <tr key={service.id}>
                                 <td>
                                     {service.imageUrl ? (
-                                        <img
+                                        <Image
                                             src={service.imageUrl.startsWith('http') ? service.imageUrl : `/uploads/${service.imageUrl}`}
                                             alt={service.title}
-                                            style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                                            width={40}
+                                            height={40}
+                                            style={{ objectFit: 'cover', borderRadius: '4px' }}
                                         />
                                     ) : (
                                         <span style={{ fontSize: '1.5rem' }}>🔧</span>
