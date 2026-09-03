@@ -10,6 +10,7 @@ export async function GET() {
         }
         return NextResponse.json(contact);
     } catch (error) {
+        console.error('Contact GET error:', error);
         return NextResponse.json({ error: 'Sunucu hatası' }, { status: 500 });
     }
 }
@@ -19,18 +20,28 @@ export async function PUT(request) {
     if (!user) return NextResponse.json({ error: 'Yetkisiz' }, { status: 401 });
 
     try {
-        const data = await request.json();
+        const body = await request.json();
+
+        // Sadece bilinen alanları al — ham data objesini Prisma'ya geçirmek
+        // bilinmeyen/beklenmedik alan varsa Prisma hatası verebilir.
+        const { address, phone, instagram, mapUrl, workingHours } = body;
+        const safeData = { address, phone, instagram, mapUrl, workingHours };
+
         let contact = await prisma.contactInfo.findFirst();
         if (contact) {
             contact = await prisma.contactInfo.update({
                 where: { id: contact.id },
-                data,
+                data: safeData,
             });
         } else {
-            contact = await prisma.contactInfo.create({ data });
+            contact = await prisma.contactInfo.create({ data: safeData });
         }
         return NextResponse.json(contact);
     } catch (error) {
-        return NextResponse.json({ error: 'Sunucu hatası' }, { status: 500 });
+        console.error('Contact PUT error:', error);
+        return NextResponse.json(
+            { error: 'Güncelleme başarısız', detail: error.message },
+            { status: 500 }
+        );
     }
 }

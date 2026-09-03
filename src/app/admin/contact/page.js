@@ -54,10 +54,12 @@ export default function AdminContact() {
             if (res.ok) {
                 showToast('İletişim bilgileri güncellendi');
             } else {
-                showToast('Güncelleme hatası', 'error');
+                const errData = await res.json().catch(() => ({}));
+                const errMsg = errData.detail || errData.error || 'Güncelleme hatası';
+                showToast(errMsg, 'error');
             }
-        } catch {
-            showToast('Bağlantı hatası', 'error');
+        } catch (err) {
+            showToast('Bağlantı hatası: ' + err.message, 'error');
         }
 
         setSaving(false);
@@ -119,7 +121,7 @@ export default function AdminContact() {
                     <div className="form-group">
                         <label>🗺️ Google Maps Embed URL</label>
                         <input
-                            type="url"
+                            type="text"
                             value={form.mapUrl}
                             onChange={e => setForm({ ...form, mapUrl: e.target.value })}
                             placeholder="https://www.google.com/maps/embed?pb=..."
