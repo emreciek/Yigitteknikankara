@@ -64,7 +64,7 @@ export default function HomePage() {
               {heroSection?.content || 'Kombi bakım, onarım ve montaj hizmetlerinde uzman ekibimizle yanınızdayız. 7/24 acil servis hizmeti.'}
             </p>
             <div className="hero-buttons fade-in-up delay-2">
-              <a href="tel:+902125550123" className="btn btn-primary">📞 Hemen Ara</a>
+              <a href={`tel:${contact?.phone || '+902125550123'}`} className="btn btn-primary">📞 Hemen Ara</a>
               <a href="/iletisim" className="btn btn-secondary">📍 Bize Ulaşın</a>
             </div>
             <div className="hero-stats fade-in-up delay-3">

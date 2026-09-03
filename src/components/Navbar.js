@@ -8,6 +8,7 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [pages, setPages] = useState([]);
+    const [phone, setPhone] = useState('');
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -23,6 +24,11 @@ export default function Navbar() {
                     setPages(data.filter(p => p.slug !== 'home'));
                 }
             })
+            .catch(() => { });
+
+        fetch('/api/contact')
+            .then(res => res.json())
+            .then(data => { if (data?.phone) setPhone(data.phone); })
             .catch(() => { });
     }, []);
 
@@ -51,7 +57,7 @@ export default function Navbar() {
                     ))}
                     <li><Link href="/iletisim" onClick={() => setMenuOpen(false)}>İletişim</Link></li>
                     <li>
-                        <Link href="tel:+902125550123" className="navbar-cta" onClick={() => setMenuOpen(false)}>
+                        <Link href={`tel:${phone || '+902125550123'}`} className="navbar-cta" onClick={() => setMenuOpen(false)}>
                             📞 Hemen Ara
                         </Link>
                     </li>
