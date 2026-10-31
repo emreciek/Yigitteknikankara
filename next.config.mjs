@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Sharp paketinin Next.js tarafından düzgün yüklenmesini ve C++ kütüphanelerinin paketlenmesini sağlar
+  // Vercel Serverless Function'da sharp'ın bundle edilmesini engeller
   serverExternalPackages: ['sharp'],
 
   experimental: {
