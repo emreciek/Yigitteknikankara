@@ -29,5 +29,8 @@
   "devDependencies": {
     "eslint": "^9",
     "eslint-config-next": "16.1.6"
+  },
+  "optionalDependencies": {
+    "@img/sharp-linux-x64": "^0.35.5"
   }
 }

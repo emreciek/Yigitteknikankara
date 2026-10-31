@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Sharp paketinin Next.js tarafından düzgün yüklenmesini ve C++ kütüphanelerinin paketlenmesini sağlar
+  serverExternalPackages: ['sharp'],
+
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb',
