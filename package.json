@@ -24,13 +24,13 @@
     "prisma": "^6.19.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "sharp": "^0.35.5"
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "eslint": "^9",
     "eslint-config-next": "16.1.6"
   },
   "optionalDependencies": {
-    "@img/sharp-linux-x64": "^0.35.5"
+    "@img/sharp-linux-x64": "0.35.5"
   }
 }
